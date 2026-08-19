@@ -14,7 +14,7 @@ from changai.changai.api.v2.schema_utils import (
     ChangAIConfig,
     CHANGAI_GUIDE_LINK,
     ERPGULF_LINK,
-    settingsUrl,
+    get_settings_url,
     format_schema_context,
     publish_pipeline_update,
     _safe_join,
@@ -103,7 +103,7 @@ def download_model_from_ui():
         frappe.throw(_("Model download failed: {0}\n Check Quick Start Guide Here 👇:\n{1} <br>" 
         "<a href='{1}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Download Embedding Model</a></b>.<br>"
         "<a href='{2}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>ERPGulf.com</a></b>."
-).format(str(e),CHANGAI_GUIDE_LINK,settingsUrl,ERPGULF_LINK))
+).format(str(e),CHANGAI_GUIDE_LINK,get_settings_url(),ERPGULF_LINK))
 
 
 
@@ -158,7 +158,7 @@ def get_embedding_engine():
                 "<a href='{0}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>Click here</a>"
                 "<a href='{2}' target='_blank' rel='noopener noreferrer' style='color: #1e90ff;'>ERPGulf.com</a></b>."
 
-            ).format(CHANGAI_GUIDE_LINK,settingsUrl,ERPGULF_LINK),
+            ).format(CHANGAI_GUIDE_LINK,get_settings_url(),ERPGULF_LINK),
             title=_("Embedding Model Required")
         )
     
@@ -245,7 +245,7 @@ def get_master_vs():
 
                 ).format(
                     master_vs_path,
-                    settingsUrl,
+                    get_settings_url(),
                     CHANGAI_GUIDE_LINK,
                     ERPGULF_LINK
                 ))
@@ -518,6 +518,7 @@ def call_fvs_field_search_global_k(
         is_table = meta.get("is_table")
         table = meta.get("table")
         field = meta.get("field") or meta.get("name")
+        grain = meta.get("grain", "")
 
         if not table or not field:
             continue
@@ -562,6 +563,7 @@ def call_fvs_field_search_global_k(
 
         grouped.setdefault(table, {
             "is_table": is_table,
+            "grain":grain,
             "fields": []
         })
         grouped[table]["fields"].append(name)
